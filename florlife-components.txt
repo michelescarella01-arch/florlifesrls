@@ -1,0 +1,1860 @@
+AC"use client"
+
+import { useEffect, useRef, useState } from "react"
+import { Globe, Leaf, Package, MapPin, Clock, Users } from "lucide-react"
+
+const reasons = [
+  {
+    icon: Globe,
+    title: "Accesso diretto ai mercati europei",
+    description: "Acquistiamo direttamente dalle aste olandesi e dai principali mercati floricoli europei.",
+  },
+  {
+    icon: Leaf,
+    title: "Produzione italiana selezionata",
+    description: "Collaboriamo con i migliori produttori della Riviera dei Fiori e delle altre regioni italiane.",
+  },
+  {
+    icon: Package,
+    title: "Ampia disponibilità quotidiana",
+    description: "Ogni giorno offriamo un assortimento vasto e aggiornato di fiori, piante e verde ornamentale.",
+  },
+  {
+    icon: MapPin,
+    title: "Due sedi operative",
+    description: "Con Sanremo e Genova copriamo un ampio territorio, garantendo rapidità nelle consegne.",
+  },
+  {
+    icon: Clock,
+    title: "Esperienza nel settore floricolo",
+    description: "Oltre 25 anni di attività e relazioni solide con produttori e clienti in tutta Europa.",
+  },
+  {
+    icon: Users,
+    title: "Supporto dedicato ai professionisti",
+    description: "Il nostro team assiste fioristi, garden center e rivenditori con competenza e attenzione.",
+  },
+]
+
+export function FeaturesSection() {
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <section ref={sectionRef} className="py-32 md:py-48 px-6 bg-foreground text-background">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div 
+          className={`text-center mb-20 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <p className="text-sm tracking-widest uppercase text-background/50 mb-6">
+            I nostri punti di forza
+          </p>
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-background">
+            Perché scegliere Florlife
+          </h2>
+        </div>
+
+        {/* Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
+          {reasons.map((reason, index) => {
+            const Icon = reason.icon
+            return (
+              <div 
+                key={reason.title} 
+                className={`group transition-all duration-700 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+                }`}
+                style={{ transitionDelay: `${200 + index * 100}ms` }}
+              >
+                {/* Icon */}
+                <div className="mb-6">
+                  <Icon className="h-8 w-8 text-background/70 transition-transform duration-300 group-hover:scale-110" />
+                </div>
+                
+                {/* Title */}
+                <h3 className="font-serif text-xl text-background mb-4 text-balance">
+                  {reason.title}
+                </h3>
+                
+                {/* Description */}
+                <p className="text-background/60 text-sm leading-relaxed">
+                  {reason.description}
+                </p>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
+"use client"
+
+import { useEffect, useRef, useState } from "react"
+
+const stats = [
+  { value: 500, suffix: "+", label: "Km coperti dalle consegne" },
+  { value: 9, suffix: "", label: "Canali di approvvigionamento" },
+  { value: 6, suffix: "", label: "Arrivi settimanali" },
+  { value: 365, suffix: "", label: "Giorni al servizio dei professionisti" },
+]
+
+function AnimatedNumber({ value, suffix, isVisible }: { value: number; suffix: string; isVisible: boolean }) {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    if (!isVisible) return
+
+    const duration = 1500
+    const steps = 40
+    const stepDuration = duration / steps
+    const increment = value / steps
+
+    let current = 0
+    const timer = setInterval(() => {
+      current += increment
+      if (current >= value) {
+        setCount(value)
+        clearInterval(timer)
+      } else {
+        setCount(Math.floor(current))
+      }
+    }, stepDuration)
+
+    return () => clearInterval(timer)
+  }, [value, isVisible])
+
+  return (
+    <span className="tabular-nums">
+      {count}{suffix}
+    </span>
+  )
+}
+
+export function StatsSection() {
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.3 }
+    )
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <section ref={sectionRef} className="py-20 md:py-24 px-6 bg-muted/30">
+      <div className="max-w-5xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+          {stats.map((stat, index) => (
+            <div
+              key={stat.label}
+              className={`text-center transition-all duration-700 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+              }`}
+              style={{ transitionDelay: `${index * 100}ms` }}
+            >
+              <div className="font-serif text-4xl md:text-5xl text-foreground mb-2">
+                <AnimatedNumber value={stat.value} suffix={stat.suffix} isVisible={isVisible} />
+              </div>
+              <p className="text-sm text-muted-foreground tracking-wide">
+                {stat.label}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+"use client"
+
+import { useState, useEffect, useCallback } from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+
+const testimonials = [
+  {
+    name: "Marco",
+    profession: "Fiorista",
+    quote: "Lavoriamo con Florlife da anni. Sapere di poter contare ogni mattina su disponibilità, qualità e puntualità ci permette di concentrarci sul nostro lavoro e sui nostri clienti.",
+  },
+  {
+    name: "Laura",
+    profession: "Fiorista per Eventi",
+    quote: "Quando organizziamo matrimoni ed eventi importanti abbiamo bisogno di affidabilità. Florlife ci garantisce continuità e una scelta sempre all'altezza delle richieste.",
+  },
+  {
+    name: "Andrea",
+    profession: "Garden Center",
+    quote: "Apprezziamo la varietà dell'assortimento e la possibilità di trovare sia prodotto locale che importazione. È un partner che ci accompagna durante tutto l'anno.",
+  },
+  {
+    name: "Chiara",
+    profession: "Fiorista",
+    quote: "Non è solo una questione di prodotto. La differenza la fanno la disponibilità, i consigli e la rapidità con cui vengono gestite le richieste.",
+  },
+  {
+    name: "Stefano",
+    profession: "Vivaio",
+    quote: "Negli anni abbiamo costruito un rapporto di fiducia. Sappiamo che dietro ogni ordine c'è attenzione, esperienza e una reale conoscenza del settore.",
+  },
+  {
+    name: "Giulia",
+    profession: "Fiorista per Eventi",
+    quote: "Per noi è fondamentale poter offrire ai clienti fiori sempre freschi e selezionati. Florlife è diventato un riferimento importante per il nostro lavoro.",
+  },
+]
+
+export function TestimonialsSection() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+
+  const nextSlide = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length)
+  }, [])
+
+  const prevSlide = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  }, [])
+
+  useEffect(() => {
+    if (!isAutoPlaying) return
+    const interval = setInterval(nextSlide, 6000)
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, nextSlide])
+
+  return (
+    <section className="py-32 bg-background overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <div className="text-center mb-20">
+          <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
+            Cosa dicono di noi
+          </h2>
+          <div className="w-16 h-px bg-secondary mx-auto" />
+        </div>
+
+        {/* Slider Container */}
+        <div 
+          className="relative"
+          onMouseEnter={() => setIsAutoPlaying(false)}
+          onMouseLeave={() => setIsAutoPlaying(true)}
+        >
+          {/* Cards */}
+          <div className="flex items-center justify-center">
+            <div className="w-full max-w-4xl">
+              {testimonials.map((testimonial, index) => (
+                <div
+                  key={testimonial.name}
+                  className={`transition-all duration-700 ease-out ${
+                    index === currentIndex
+                      ? "opacity-100 translate-x-0"
+                      : "opacity-0 absolute pointer-events-none translate-x-8"
+                  }`}
+                  style={{ display: index === currentIndex ? "block" : "none" }}
+                >
+                  <div className="bg-card p-12 md:p-16 shadow-sm border border-border/30">
+                    {/* Quote Mark */}
+                    <div className="mb-8">
+                      <span className="font-serif text-8xl text-secondary/30 leading-none">"</span>
+                    </div>
+
+                    {/* Quote */}
+                    <blockquote className="font-serif text-2xl md:text-3xl text-foreground leading-relaxed mb-12 -mt-8">
+                      {testimonial.quote}
+                    </blockquote>
+
+                    {/* Attribution */}
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-px bg-secondary" />
+                      <div>
+                        <p className="text-foreground font-medium tracking-wide">
+                          {testimonial.name}
+                        </p>
+                        <p className="text-muted-foreground text-sm tracking-wide">
+                          {testimonial.profession}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation Arrows */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 w-12 h-12 flex items-center justify-center text-foreground/40 hover:text-foreground transition-colors"
+            aria-label="Testimonianza precedente"
+          >
+            <ChevronLeft className="w-8 h-8" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 w-12 h-12 flex items-center justify-center text-foreground/40 hover:text-foreground transition-colors"
+            aria-label="Testimonianza successiva"
+          >
+            <ChevronRight className="w-8 h-8" />
+          </button>
+        </div>
+
+        {/* Dots Navigation */}
+        <div className="flex justify-center gap-3 mt-12">
+          {testimonials.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentIndex
+                  ? "bg-foreground w-8"
+                  : "bg-foreground/20 hover:bg-foreground/40"
+              }`}
+              aria-label={`Vai alla testimonianza ${index + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+"use client"
+
+import { useEffect, useRef, useState } from "react"
+
+const days = [
+  { short: "LUN", full: "Lunedì" },
+  { short: "MAR", full: "Martedì" },
+  { short: "MER", full: "Mercoledì" },
+  { short: "GIO", full: "Giovedì" },
+  { short: "VEN", full: "Venerdì" },
+  { short: "SAB", full: "Sabato" },
+]
+
+const arrivalsByDay: Record<string, string[]> = {
+  LUN: ["Produzione locale"],
+  MAR: ["Importazione Sud America", "Asta Olandese"],
+  MER: ["Produzione locale"],
+  GIO: ["Asta Olandese"],
+  VEN: ["Produzione locale", "Importazione Sud America"],
+  SAB: ["Asta Olandese"],
+}
+
+const tagStyles: Record<string, string> = {
+  "Produzione locale": "bg-emerald-600/10 text-emerald-700 border-emerald-600/20",
+  "Importazione Sud America": "bg-amber-600/10 text-amber-700 border-amber-600/20",
+  "Asta Olandese": "bg-orange-500/10 text-orange-700 border-orange-500/20",
+}
+
+export function ArrivalsSection() {
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+  const [selectedDay, setSelectedDay] = useState<string>("LUN")
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  const arrivals = arrivalsByDay[selectedDay] || []
+
+  return (
+    <section ref={sectionRef} className="py-24 md:py-32 px-6 bg-background">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div 
+          className={`text-center mb-16 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-6">
+            Calendario Arrivi
+          </h2>
+          <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed">
+            Seleziona un giorno per vedere gli arrivi previsti.
+          </p>
+        </div>
+
+        {/* Week Days Selector */}
+        <div 
+          className={`flex justify-center gap-2 md:gap-3 mb-12 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{ transitionDelay: "150ms" }}
+        >
+          {days.map((day) => (
+            <button
+              key={day.short}
+              onClick={() => setSelectedDay(day.short)}
+              className={`relative px-4 md:px-6 py-3 text-sm md:text-base tracking-wider transition-all duration-300 ${
+                selectedDay === day.short
+                  ? "text-foreground"
+                  : "text-muted-foreground/60 hover:text-muted-foreground"
+              }`}
+            >
+              {day.short}
+              {selectedDay === day.short && (
+                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-6 h-px bg-foreground transition-all" />
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Arrivals Display */}
+        <div 
+          className={`min-h-[160px] flex flex-col items-center justify-center transition-all duration-500 ${
+            isVisible ? "opacity-100" : "opacity-0"
+          }`}
+          style={{ transitionDelay: "300ms" }}
+        >
+          <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground mb-6">
+            {days.find(d => d.short === selectedDay)?.full}
+          </p>
+          
+          <div className="flex flex-wrap justify-center gap-3">
+            {arrivals.map((arrival, index) => (
+              <span
+                key={arrival}
+                className={`px-5 py-2.5 text-sm border rounded-sm transition-all duration-300 ${tagStyles[arrival]}`}
+                style={{ 
+                  animationDelay: `${index * 100}ms`,
+                  animation: "fade-in 0.4s ease-out forwards"
+                }}
+              >
+                {arrival}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Info Note */}
+        <p 
+          className={`text-center text-xs text-muted-foreground/70 mt-12 transition-all duration-700 ${
+            isVisible ? "opacity-100" : "opacity-0"
+          }`}
+          style={{ transitionDelay: "450ms" }}
+        >
+          Gli arrivi possono variare in base a disponibilità e condizioni logistiche.
+        </p>
+      </div>
+    </section>
+  )
+}
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+
+export function SeasonalityPreview() {
+  return (
+    <section className="relative py-24 overflow-hidden">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 bg-gradient-to-br from-muted/50 via-background to-muted/30" />
+      <div 
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}
+      />
+      
+      <div className="relative max-w-4xl mx-auto px-6 text-center">
+        {/* Small decorative element */}
+        <div className="flex justify-center mb-8">
+          <div className="flex items-center gap-3">
+            <span className="w-8 h-px bg-foreground/30" />
+            <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">Calendario annuale</span>
+            <span className="w-8 h-px bg-foreground/30" />
+          </div>
+        </div>
+
+        {/* Title */}
+        <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-6">
+          Guida alla Stagionalità
+        </h2>
+
+        {/* Description */}
+        <p className="text-muted-foreground text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto mb-10">
+          Scopri quali prodotti sono disponibili durante l&apos;anno in base a origine, produzione e andamento dei mercati.
+        </p>
+
+        {/* CTA Button */}
+        <Link
+          href="/stagionalita"
+          className="group inline-flex items-center gap-3 px-10 py-4 bg-foreground text-background text-sm tracking-widest uppercase hover:bg-foreground/90 transition-all"
+        >
+          Esplora la stagionalità
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </Link>
+      </div>
+    </section>
+  )
+}
+"use client"
+
+import { useEffect, useRef, useState } from "react"
+import { MapPin, Clock, Phone, Mail } from "lucide-react"
+
+const locations = [
+  {
+    name: "Sanremo",
+    address: "Via Quinto Mansuino, Box 5",
+    city: "18038 Sanremo (IM)",
+    phone: "+39 334 349 1273",
+    email: "infosr@florlifesrl.com",
+    hours: [
+      { day: "Lunedì", slots: ["05:00–13:00", "17:00–19:00"] },
+      { day: "Martedì", slots: ["07:00–10:00", "16:00–19:00"] },
+      { day: "Mercoledì", slots: ["05:00–13:00", "17:00–19:00"] },
+      { day: "Giovedì", slots: ["07:00–10:00", "16:00–19:00"] },
+      { day: "Venerdì", slots: ["05:00–13:00", "17:00–19:00"] },
+      { day: "Sabato", slots: ["07:00–10:00", "16:00–19:00"] },
+    ],
+    mapUrl: "https://www.google.com/maps/place/Via+Quinto+Mansuino,+18038+Sanremo+IM",
+    embedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1000!2d7.7683!3d43.8156!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12cdc94fcbe73f1f%3A0x4d7d8f8e8e8e8e8e!2sVia%20Quinto%20Mansuino%2C%2018038%20Sanremo%20IM!5e0!3m2!1sit!2sit!4v1700000000000!5m2!1sit!2sit",
+  },
+  {
+    name: "Genova",
+    address: "Via Luigi Perini 26/28",
+    city: "16152 Genova (GE)",
+    phone: "+39 375 771 6820",
+    email: "infoge@florlifesrl.com",
+    hours: [
+      { day: "Lunedì", slots: ["06:00–12:00", "16:00–18:00"] },
+      { day: "Martedì", slots: ["06:00–12:00", "16:00–18:00"] },
+      { day: "Mercoledì", slots: ["06:00–12:00"] },
+      { day: "Giovedì", slots: ["06:00–12:00", "16:00–18:00"] },
+      { day: "Venerdì", slots: ["06:00–12:00"] },
+      { day: "Sabato", slots: ["06:00–12:00"] },
+    ],
+    mapUrl: "https://www.google.com/maps/place/Via+Luigi+Perini,+26,+16152+Genova+GE",
+    embedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1000!2d8.8524!3d44.4185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12d343f2c8d85c35%3A0x7f1e3a5b9c4d2e6f!2sVia%20Luigi%20Perini%2C%2026%2C%2016152%20Genova%20GE!5e0!3m2!1sit!2sit!4v1700000000000!5m2!1sit!2sit",
+  },
+]
+
+export function LocationsSection() {
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <section ref={sectionRef} id="sedi" className="py-32 md:py-48 px-6 bg-background">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div 
+          className={`text-center mb-20 md:mb-24 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-6">
+            Dove trovarci
+          </p>
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground">
+            Le nostre sedi
+          </h2>
+        </div>
+
+        {/* Locations Grid */}
+        <div className="grid md:grid-cols-2 gap-16 lg:gap-24">
+          {locations.map((location, index) => (
+            <div
+              key={location.name}
+              className={`group transition-all duration-700 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+              }`}
+              style={{ transitionDelay: `${300 + index * 150}ms` }}
+            >
+              {/* Map */}
+              <div className="relative aspect-square md:aspect-[4/3] overflow-hidden mb-10">
+                <iframe
+                  src={location.embedUrl}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title={`Mappa ${location.name}`}
+                  className="grayscale transition-all duration-500 group-hover:grayscale-0"
+                />
+              </div>
+
+              {/* Content */}
+              <div>
+                <h3 className="font-serif text-3xl md:text-4xl text-foreground mb-8">
+                  {location.name}
+                </h3>
+
+                <div className="space-y-6">
+                  {/* Address */}
+                  <div className="flex items-start gap-4">
+                    <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-1" />
+                    <div>
+                      <p className="text-foreground">{location.address}</p>
+                      <p className="text-muted-foreground text-sm mt-0.5">{location.city}</p>
+                    </div>
+                  </div>
+
+                  {/* Phone */}
+                  <div className="flex items-center gap-4">
+                    <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <a 
+                      href={`tel:${location.phone.replace(/\s/g, '')}`}
+                      className="text-foreground hover:text-secondary transition-colors"
+                    >
+                      {location.phone}
+                    </a>
+                  </div>
+
+                  {/* Email */}
+                  <div className="flex items-center gap-4">
+                    <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <a 
+                      href={`mailto:${location.email}`}
+                      className="text-foreground hover:text-secondary transition-colors"
+                    >
+                      {location.email}
+                    </a>
+                  </div>
+
+                  {/* Hours - Daily Schedule */}
+                  <div className="flex items-start gap-4 pt-2">
+                    <Clock className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-1" />
+                    <div className="flex-1">
+                      <p className="text-foreground text-sm font-medium mb-3">Orari di apertura</p>
+                      <div className="space-y-0">
+                        {location.hours.map((schedule, idx) => (
+                          <div 
+                            key={idx} 
+                            className={`flex items-center justify-between py-2 ${
+                              idx < location.hours.length - 1 ? "border-b border-border/50" : ""
+                            }`}
+                          >
+                            <span className="text-muted-foreground text-sm">{schedule.day}</span>
+                            <span className="text-foreground text-sm">
+                              {schedule.slots.join(" / ")}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* CTA Button */}
+                <a
+                  href={`mailto:${location.email}?subject=Richiesta informazioni - Sede ${location.name}`}
+                  className="inline-flex items-center justify-center mt-10 px-8 py-4 bg-foreground text-background text-sm tracking-widest uppercase hover:bg-foreground/90 transition-all"
+                >
+                  Contatta {location.name}
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+"use client"
+
+import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import { ArrowRight, UserPlus, Calendar, Globe } from "lucide-react"
+
+const services = [
+  {
+    icon: UserPlus,
+    title: "Richiedi Accesso",
+    description: "L'accesso ai servizi Florlife è riservato ai professionisti del settore.",
+    href: "/richiedi-accesso",
+    cta: "Richiedi accesso",
+  },
+  {
+    icon: Calendar,
+    title: "Stagionalità",
+    description: "Consulta la guida stagionale dei prodotti disponibili durante l'anno.",
+    href: "/stagionalita",
+    cta: "Vai alla stagionalità",
+  },
+  {
+    icon: Globe,
+    title: "Mercati",
+    description: "Scopri provenienze, produzioni e mercati di riferimento.",
+    href: "#mercati",
+    cta: "Scopri i mercati",
+  },
+]
+
+export function ClientAreaSection() {
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <section ref={sectionRef} id="area-clienti" className="py-24 md:py-32 px-6 bg-background">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div 
+          className={`text-center mb-16 md:mb-20 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-4">
+            Riservato ai professionisti
+          </p>
+          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-4">
+            Area Professionisti
+          </h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            Servizi dedicati ai clienti Florlife
+          </p>
+        </div>
+
+        {/* Cards Grid */}
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+          {services.map((service, index) => {
+            const Icon = service.icon
+            return (
+              <div
+                key={service.title}
+                className={`group p-8 lg:p-10 border border-border bg-card hover:border-foreground/20 transition-all duration-500 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+                }`}
+                style={{ transitionDelay: `${200 + index * 100}ms` }}
+              >
+                {/* Icon */}
+                <div className="mb-6">
+                  <Icon className="h-7 w-7 text-muted-foreground group-hover:text-foreground transition-colors" />
+                </div>
+
+                {/* Title */}
+                <h3 className="font-serif text-xl md:text-2xl text-foreground mb-4">
+                  {service.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-muted-foreground text-sm leading-relaxed mb-8">
+                  {service.description}
+                </p>
+
+                {/* CTA */}
+                <Link
+                  href={service.href}
+                  className="inline-flex items-center gap-2 text-sm tracking-wide text-foreground hover:opacity-70 transition-opacity"
+                >
+                  {service.cta}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
+import Link from "next/link"
+import { Phone, Mail } from "lucide-react"
+
+export function Footer() {
+  return (
+    <footer className="py-20 md:py-24 px-6 border-t border-border">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
+          {/* Brand */}
+          <div className="lg:col-span-1">
+            <Link href="/" className="inline-block">
+              <img
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/dac5076b-74bc-48a9-9074-051c803c7763-oC6dbnX5bLg3NuEgCFBxD4H9BOyvEt.jpeg"
+                alt="Florlife - Import Export Sanremo Genova"
+                className="h-20 w-auto"
+              />
+            </Link>
+            <p className="mt-4 text-xs text-muted-foreground leading-relaxed">
+              Fiori recisi · Verde ornamentale · Piante · Importazione diretta
+            </p>
+          </div>
+
+          {/* Sanremo */}
+          <div>
+            <p className="text-sm font-medium tracking-wide text-foreground mb-4">
+              Florlife Sanremo
+            </p>
+            <div className="space-y-3 text-sm text-muted-foreground">
+              <p>Via Quinto Mansuino, Box 5</p>
+              <p>18038 Sanremo (IM)</p>
+              <div className="pt-2 space-y-2">
+                <a 
+                  href="tel:+393343491273" 
+                  className="flex items-center gap-2 hover:text-foreground transition-colors"
+                >
+                  <Phone className="h-3.5 w-3.5" />
+                  +39 334 349 1273
+                </a>
+                <a 
+                  href="mailto:infosr@florlifesrl.com" 
+                  className="flex items-center gap-2 hover:text-foreground transition-colors"
+                >
+                  <Mail className="h-3.5 w-3.5" />
+                  infosr@florlifesrl.com
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Genova */}
+          <div>
+            <p className="text-sm font-medium tracking-wide text-foreground mb-4">
+              Florlife Genova
+            </p>
+            <div className="space-y-3 text-sm text-muted-foreground">
+              <p>Via Luigi Perini 26/28</p>
+              <p>16152 Genova (GE)</p>
+              <div className="pt-2 space-y-2">
+                <a 
+                  href="tel:+393757716820" 
+                  className="flex items-center gap-2 hover:text-foreground transition-colors"
+                >
+                  <Phone className="h-3.5 w-3.5" />
+                  +39 375 771 6820
+                </a>
+                <a 
+                  href="mailto:infoge@florlifesrl.com" 
+                  className="flex items-center gap-2 hover:text-foreground transition-colors"
+                >
+                  <Mail className="h-3.5 w-3.5" />
+                  infoge@florlifesrl.com
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <div>
+            <p className="text-sm font-medium tracking-wide text-foreground mb-4">
+              Navigazione
+            </p>
+            <nav className="space-y-3 text-sm text-muted-foreground">
+              <Link href="/" className="block hover:text-foreground transition-colors">
+                Home
+              </Link>
+              <Link href="#mercati" className="block hover:text-foreground transition-colors">
+                Mercati
+              </Link>
+              <Link href="/stagionalita" className="block hover:text-foreground transition-colors">
+                Stagionalità
+              </Link>
+              <Link href="#area-professionisti" className="block hover:text-foreground transition-colors">
+                Area Professionisti
+              </Link>
+              <Link href="/richiedi-accesso" className="block hover:text-foreground transition-colors">
+                Richiedi Accesso
+              </Link>
+            </nav>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <p className="text-sm font-medium tracking-wide text-foreground mb-4">
+              Link Utili
+            </p>
+            <nav className="space-y-3 text-sm text-muted-foreground">
+              <Link href="#sedi" className="block hover:text-foreground transition-colors">
+                Le Nostre Sedi
+              </Link>
+              <Link href="#chi-siamo" className="block hover:text-foreground transition-colors">
+                Chi Siamo
+              </Link>
+              <Link href="#calendario" className="block hover:text-foreground transition-colors">
+                Calendario Arrivi
+              </Link>
+            </nav>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} Florlife S.r.l. Tutti i diritti riservati.
+          </p>
+          <div className="flex gap-6 text-xs text-muted-foreground">
+            <Link href="#" className="hover:text-foreground transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="#" className="hover:text-foreground transition-colors">
+              Cookie Policy
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
+"use client"
+
+import { useState } from "react"
+import { MessageCircle, X, MapPin } from "lucide-react"
+
+const contacts = [
+  {
+    name: "Sanremo",
+    phone: "+39 334 349 1273",
+    whatsapp: "https://wa.me/393343491273",
+  },
+  {
+    name: "Genova",
+    phone: "+39 375 771 6820",
+    whatsapp: "https://wa.me/393757716820",
+  },
+]
+
+export function WhatsAppButton() {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <div className="fixed bottom-6 right-6 z-50">
+      {/* Contact Panel */}
+      {isOpen && (
+        <div 
+          className="absolute bottom-16 right-0 w-72 bg-background border border-border shadow-xl rounded-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300"
+        >
+          {/* Header */}
+          <div className="px-5 py-4 border-b border-border bg-muted/30">
+            <p className="font-serif text-lg text-foreground">Contatta Florlife</p>
+          </div>
+
+          {/* Contact Options */}
+          <div className="divide-y divide-border">
+            {contacts.map((contact) => (
+              <a
+                key={contact.name}
+                href={contact.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 px-5 py-4 hover:bg-muted/50 transition-colors"
+              >
+                <div className="w-10 h-10 rounded-full bg-green-600/10 flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-4 h-4 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">{contact.name}</p>
+                  <p className="text-xs text-muted-foreground">{contact.phone}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
+          isOpen
+            ? "bg-foreground text-background rotate-0"
+            : "bg-green-600 text-white hover:bg-green-700"
+        }`}
+        aria-label={isOpen ? "Chiudi contatti" : "Apri contatti WhatsApp"}
+      >
+        {isOpen ? (
+          <X className="w-5 h-5" />
+        ) : (
+          <MessageCircle className="w-5 h-5" />
+        )}
+      </button>
+    </div>
+  )
+}
+"use client"
+
+import { useState, useMemo, useRef, useEffect } from "react"
+import Link from "next/link"
+import { Navigation } from "@/components/navigation"
+import { Footer } from "@/components/footer"
+import { WhatsAppButton } from "@/components/whatsapp-button"
+import { ArrowLeft, X } from "lucide-react"
+
+const monthsShort = ["GEN", "FEB", "MAR", "APR", "MAG", "GIU", "LUG", "AGO", "SET", "OTT", "NOV", "DIC"]
+const monthsFull = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"]
+
+// Seasonal featured products by month
+const seasonalBanners: Record<number, { description: string; featured: string[] }> = {
+  1: { description: "I fiori invernali più pregiati", featured: ["Ranuncoli", "Anemoni", "Tulipani", "Fresie"] },
+  2: { description: "Prime fioriture e nuovi arrivi", featured: ["Ranuncoli", "Tulipani", "Mimosa", "Violacciocca"] },
+  3: { description: "La primavera inizia a sbocciare", featured: ["Tulipani", "Fresie", "Ranuncoli", "Anemoni"] },
+  4: { description: "Esplosione di colori primaverili", featured: ["Peonie", "Ranuncoli", "Tulipani", "Godezia"] },
+  5: { description: "Il momento delle peonie", featured: ["Peonie", "Lisianthus", "Delphinium", "Calla"] },
+  6: { description: "Estate alle porte", featured: ["Peonie", "Ortensie", "Agapanthus", "Girasoli"] },
+  7: { description: "I colori caldi dell'estate", featured: ["Girasoli", "Ortensie", "Lisianthus", "Dalie"] },
+  8: { description: "Fiori estivi al culmine", featured: ["Girasoli", "Ortensie", "Dalie", "Celosia"] },
+  9: { description: "L'autunno si avvicina", featured: ["Dalie", "Ortensie", "Crisantemi", "Hypericum"] },
+  10: { description: "Atmosfere autunnali", featured: ["Crisantemi", "Dalie", "Hypericum", "Brassica"] },
+  11: { description: "Verso l'inverno", featured: ["Crisantemi", "Amarillis", "Ilex", "Anemoni"] },
+  12: { description: "Fiori per le feste", featured: ["Amarillis", "Tulipani", "Ilex", "Cymbidium"] },
+}
+
+type OriginKey = "italia" | "olanda" | "ecuador" | "colombia" | "sudamerica" | "verde"
+
+interface FlowerAvailability {
+  origin: OriginKey
+  label: string
+  period: string
+  months: number[]
+}
+
+interface Flower {
+  name: string
+  category: "reciso" | "verde"
+  availability: FlowerAvailability[]
+}
+
+const originColors: Record<OriginKey, string> = {
+  italia: "bg-emerald-600",
+  olanda: "bg-orange-500",
+  ecuador: "bg-amber-500",
+  colombia: "bg-yellow-500",
+  sudamerica: "bg-amber-600",
+  verde: "bg-green-700",
+}
+
+const flowerDatabase: Flower[] = [
+  // Fiori recisi
+  { name: "Lilium", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Girasole", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Giu–Set", months: [6,7,8,9] },
+  ]},
+  { name: "Garofano", category: "reciso", availability: [
+    { origin: "sudamerica", label: "Sud America", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Rosa", category: "reciso", availability: [
+    { origin: "ecuador", label: "Ecuador", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+    { origin: "colombia", label: "Colombia", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+    { origin: "olanda", label: "Olanda", period: "Apr–Ott", months: [4,5,6,7,8,9,10] },
+  ]},
+  { name: "Alstroemeria", category: "reciso", availability: [
+    { origin: "sudamerica", label: "Sud America", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Statice", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Mag–Ott", months: [5,6,7,8,9,10] },
+  ]},
+  { name: "Limonium", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Mag–Ott", months: [5,6,7,8,9,10] },
+  ]},
+  { name: "Eryngium", category: "reciso", availability: [
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Santini", category: "reciso", availability: [
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Peonia", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Apr–Giu", months: [4,5,6] },
+    { origin: "olanda", label: "Olanda", period: "Apr–Giu", months: [4,5,6] },
+  ]},
+  { name: "Ranuncolo", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Gen–Apr", months: [1,2,3,4] },
+  ]},
+  { name: "Anemone", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Nov–Apr", months: [11,12,1,2,3,4] },
+  ]},
+  { name: "Godezia", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Apr–Giu", months: [4,5,6] },
+  ]},
+  { name: "Tulipano", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Dic–Apr", months: [12,1,2,3,4] },
+    { origin: "olanda", label: "Olanda", period: "Nov–Mag", months: [11,12,1,2,3,4,5] },
+  ]},
+  { name: "Crisantemo", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Anthurium", category: "reciso", availability: [
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Gerbera", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Germini", category: "reciso", availability: [
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Allium", category: "reciso", availability: [
+    { origin: "olanda", label: "Olanda", period: "Apr–Lug", months: [4,5,6,7] },
+  ]},
+  { name: "Fresia", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Gen–Mag", months: [1,2,3,4,5] },
+    { origin: "olanda", label: "Olanda", period: "Gen–Mag", months: [1,2,3,4,5] },
+  ]},
+  { name: "Violacciocca", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Feb–Mag", months: [2,3,4,5] },
+  ]},
+  { name: "Lepidium", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Apr–Lug", months: [4,5,6,7] },
+  ]},
+  { name: "Lisianthus", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Mag–Ott", months: [5,6,7,8,9,10] },
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Green Trick", category: "reciso", availability: [
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Camomilla", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Mag–Lug", months: [5,6,7] },
+  ]},
+  { name: "Cymbidium", category: "reciso", availability: [
+    { origin: "olanda", label: "Olanda", period: "Set–Apr", months: [9,10,11,12,1,2,3,4] },
+  ]},
+  { name: "Fior di Riso", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Feb–Mag", months: [2,3,4,5] },
+  ]},
+  { name: "Delphinium", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Mag–Ago", months: [5,6,7,8] },
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Solidago", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Lug–Ott", months: [7,8,9,10] },
+  ]},
+  { name: "Achillea", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Giu–Set", months: [6,7,8,9] },
+  ]},
+  { name: "Agapanthus", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Giu–Ago", months: [6,7,8] },
+  ]},
+  { name: "Ageratum", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Giu–Set", months: [6,7,8,9] },
+  ]},
+  { name: "Ammi Majus", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Mag–Lug", months: [5,6,7] },
+  ]},
+  { name: "Bocca di Leone", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Apr–Set", months: [4,5,6,7,8,9] },
+  ]},
+  { name: "Astrantia", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Mag–Set", months: [5,6,7,8,9] },
+  ]},
+  { name: "Carthamus", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Giu–Ago", months: [6,7,8] },
+  ]},
+  { name: "Celosia", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Lug–Ott", months: [7,8,9,10] },
+  ]},
+  { name: "Wax Flower", category: "reciso", availability: [
+    { origin: "sudamerica", label: "Sud America", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Curcuma", category: "reciso", availability: [
+    { origin: "olanda", label: "Olanda", period: "Mag–Ott", months: [5,6,7,8,9,10] },
+  ]},
+  { name: "Dalia", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Lug–Ott", months: [7,8,9,10] },
+  ]},
+  { name: "Craspedia", category: "reciso", availability: [
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Ortensia", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Giu–Ott", months: [6,7,8,9,10] },
+    { origin: "olanda", label: "Olanda", period: "Mag–Nov", months: [5,6,7,8,9,10,11] },
+  ]},
+  { name: "Lysimachia", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Giu–Ago", months: [6,7,8] },
+  ]},
+  { name: "Molucella", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Mag–Ago", months: [5,6,7,8] },
+  ]},
+  { name: "Ornithogalum", category: "reciso", availability: [
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Scabiosa", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Mag–Set", months: [5,6,7,8,9] },
+  ]},
+  { name: "Veronica", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Giu–Set", months: [6,7,8,9] },
+  ]},
+  { name: "Calla", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Mar–Lug", months: [3,4,5,6,7] },
+  ]},
+  { name: "Hypericum", category: "reciso", availability: [
+    { origin: "olanda", label: "Olanda", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Brassica", category: "reciso", availability: [
+    { origin: "olanda", label: "Olanda", period: "Set–Mar", months: [9,10,11,12,1,2,3] },
+  ]},
+  { name: "Amarillis", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Nov–Feb", months: [11,12,1,2] },
+  ]},
+  { name: "Ilex", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Nov–Dic", months: [11,12] },
+  ]},
+  { name: "Nutan", category: "reciso", availability: [
+    { origin: "sudamerica", label: "Sud America", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Protea", category: "reciso", availability: [
+    { origin: "sudamerica", label: "Sud America", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Gentiana", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Lug–Ott", months: [7,8,9,10] },
+  ]},
+  { name: "Gypsophila", category: "reciso", availability: [
+    { origin: "sudamerica", label: "Sud America", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Mimosa", category: "reciso", availability: [
+    { origin: "italia", label: "Italia", period: "Feb–Mar", months: [2,3] },
+  ]},
+  
+  // Verde ornamentale
+  { name: "Eucalipto", category: "verde", availability: [
+    { origin: "verde", label: "Verde", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Pittosporo", category: "verde", availability: [
+    { origin: "verde", label: "Verde", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Lentisco", category: "verde", availability: [
+    { origin: "verde", label: "Verde", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Ruscus", category: "verde", availability: [
+    { origin: "verde", label: "Verde", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Grevillea", category: "verde", availability: [
+    { origin: "verde", label: "Verde", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Skimmia", category: "verde", availability: [
+    { origin: "verde", label: "Verde", period: "Ott–Feb", months: [10,11,12,1,2] },
+  ]},
+  { name: "Siegras", category: "verde", availability: [
+    { origin: "verde", label: "Verde", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Ginestra", category: "verde", availability: [
+    { origin: "verde", label: "Verde", period: "Feb–Mag", months: [2,3,4,5] },
+  ]},
+  { name: "Gunny", category: "verde", availability: [
+    { origin: "verde", label: "Verde", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+  { name: "Cocculus", category: "verde", availability: [
+    { origin: "verde", label: "Verde", period: "Tutto l'anno", months: [1,2,3,4,5,6,7,8,9,10,11,12] },
+  ]},
+]
+
+export default function StagionalitaPage() {
+  const [selectedMonth, setSelectedMonth] = useState<number | null>(null)
+  const [selectedOrigin, setSelectedOrigin] = useState<string>("all")
+  const [selectedFlower, setSelectedFlower] = useState<Flower | null>(null)
+  const timelineRef = useRef<HTMLDivElement>(null)
+
+  // Scroll selected month into view
+  useEffect(() => {
+    if (selectedMonth !== null && timelineRef.current) {
+      const activeButton = timelineRef.current.querySelector(`[data-month="${selectedMonth}"]`)
+      if (activeButton) {
+        activeButton.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+      }
+    }
+  }, [selectedMonth])
+
+  // Close modal on escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedFlower(null)
+    }
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [])
+
+  const filteredFlowers = useMemo(() => {
+    return flowerDatabase.filter(flower => {
+      const matchesMonth = selectedMonth === null || 
+        flower.availability.some(a => a.months.includes(selectedMonth))
+      
+      let matchesOrigin = true
+      if (selectedOrigin !== "all") {
+        if (selectedOrigin === "sudamerica") {
+          matchesOrigin = flower.availability.some(a => 
+            a.origin === "sudamerica" || a.origin === "ecuador" || a.origin === "colombia"
+          )
+        } else if (selectedOrigin === "verde") {
+          matchesOrigin = flower.category === "verde"
+        } else {
+          matchesOrigin = flower.availability.some(a => a.origin === selectedOrigin)
+        }
+      }
+      
+      return matchesMonth && matchesOrigin
+    })
+  }, [selectedMonth, selectedOrigin])
+
+  // Sort flowers alphabetically
+  const sortedFlowers = useMemo(() => {
+    return [...filteredFlowers].sort((a, b) => a.name.localeCompare(b.name))
+  }, [filteredFlowers])
+
+  const currentBanner = selectedMonth ? seasonalBanners[selectedMonth] : null
+
+  return (
+    <>
+      <Navigation />
+      <main className="bg-background min-h-screen">
+        {/* Hero */}
+        <section className="pt-32 pb-16 md:pt-40 md:pb-20 px-6">
+          <div className="max-w-7xl mx-auto">
+            <Link 
+              href="/" 
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-12"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Torna alla home
+            </Link>
+            
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-foreground leading-[1.05] tracking-tight max-w-4xl">
+              Guida alla Stagionalità
+            </h1>
+            
+            <p className="mt-8 text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
+              Scopri quali fiori sono disponibili durante l&apos;anno, le loro origini e i periodi migliori di raccolta.
+            </p>
+          </div>
+        </section>
+
+        {/* Sticky Filters */}
+        <div className="sticky top-[73px] z-40 bg-background/95 backdrop-blur-sm border-b border-border">
+          {/* Month Timeline */}
+          <div 
+            ref={timelineRef}
+            className="overflow-x-auto scrollbar-hide"
+          >
+            <div className="flex items-center justify-center min-w-max px-6 py-8">
+              {monthsShort.map((month, index) => (
+                <button
+                  key={month}
+                  data-month={index + 1}
+                  onClick={() => setSelectedMonth(selectedMonth === index + 1 ? null : index + 1)}
+                  className={`relative px-3 md:px-5 py-2 text-xs md:text-sm tracking-[0.2em] font-light transition-all duration-300 ${
+                    selectedMonth === index + 1
+                      ? "text-foreground font-normal"
+                      : "text-muted-foreground/60 hover:text-muted-foreground"
+                  }`}
+                >
+                  {month}
+                  {index < monthsShort.length - 1 && (
+                    <span className="absolute right-0 top-1/2 -translate-y-1/2 text-border/40 font-extralight">—</span>
+                  )}
+                  {selectedMonth === index + 1 && (
+                    <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-6 h-px bg-foreground" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Origin Filters */}
+          <div className="flex gap-6 md:gap-10 px-6 py-5 overflow-x-auto scrollbar-hide border-t border-border/30 justify-center">
+            {[
+              { key: "all", label: "Tutti" },
+              { key: "italia", label: "Italia", color: "bg-emerald-600" },
+              { key: "olanda", label: "Olanda", color: "bg-orange-500" },
+              { key: "sudamerica", label: "Sud America", color: "bg-amber-600" },
+              { key: "verde", label: "Verde", color: "bg-green-700" },
+            ].map((filter) => (
+              <button
+                key={filter.key}
+                onClick={() => setSelectedOrigin(filter.key)}
+                className={`flex items-center gap-2.5 flex-shrink-0 text-xs tracking-widest uppercase transition-all duration-300 ${
+                  selectedOrigin === filter.key
+                    ? "text-foreground"
+                    : "text-muted-foreground/60 hover:text-muted-foreground"
+                }`}
+              >
+                {filter.color && (
+                  <span className={`w-2 h-2 rounded-full ${filter.color}`} />
+                )}
+                {filter.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Seasonal Banner */}
+        {currentBanner && (
+          <section className="py-12 px-6 bg-muted/30 border-b border-border">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                  <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-2">
+                    {monthsFull[selectedMonth! - 1]}
+                  </h2>
+                  <p className="text-muted-foreground">
+                    {currentBanner.description}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {currentBanner.featured.map((product) => (
+                    <span
+                      key={product}
+                      className="px-4 py-2 bg-background border border-border text-sm text-foreground"
+                    >
+                      {product}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Results */}
+        <section className="py-16 md:py-20 px-6">
+          <div className="max-w-7xl mx-auto">
+            {/* Results Header */}
+            <div className="flex items-baseline justify-between mb-12 pb-6 border-b border-border/50">
+              <div>
+                <h2 className="font-serif text-2xl md:text-3xl text-foreground">
+                  {selectedMonth ? monthsFull[selectedMonth - 1] : "Tutto l'anno"}
+                </h2>
+                <p className="text-muted-foreground text-sm mt-1">
+                  {sortedFlowers.length} varietà disponibili
+                </p>
+              </div>
+              {(selectedMonth || selectedOrigin !== "all") && (
+                <button
+                  onClick={() => { setSelectedMonth(null); setSelectedOrigin("all") }}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Rimuovi filtri
+                </button>
+              )}
+            </div>
+
+            {/* Flower List */}
+            {sortedFlowers.length > 0 ? (
+              <div className="grid gap-0 divide-y divide-border/50">
+                {sortedFlowers.map((flower) => (
+                  <article 
+                    key={flower.name}
+                    onClick={() => setSelectedFlower(flower)}
+                    className="py-5 grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-4 md:gap-8 items-center cursor-pointer hover:bg-muted/30 -mx-4 px-4 transition-colors"
+                  >
+                    {/* Name */}
+                    <h3 className="font-serif text-xl text-foreground">
+                      {flower.name}
+                    </h3>
+                    
+                    {/* Origins */}
+                    <div className="flex items-center gap-4 flex-wrap">
+                      {flower.availability.map((avail) => (
+                        <div key={avail.origin} className="flex items-center gap-2">
+                          <span className={`w-2.5 h-2.5 rounded-full ${originColors[avail.origin]}`} />
+                          <span className="text-sm text-muted-foreground">
+                            {avail.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Period */}
+                    <p className="text-sm text-muted-foreground md:text-right md:min-w-[140px]">
+                      {flower.availability.map(a => a.period).join(" · ")}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-24">
+                <p className="text-muted-foreground text-lg">
+                  Nessuna varietà trovata con i filtri selezionati.
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Disclaimer */}
+        <section className="py-20 px-6 bg-muted/30">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-muted-foreground text-sm leading-relaxed mb-8">
+              La disponibilità indicata è orientativa e può variare in base a origine, qualità, condizioni climatiche e andamento dei mercati.
+            </p>
+            <Link
+              href="/richiedi-accesso"
+              className="inline-flex items-center justify-center px-10 py-4 bg-foreground text-background text-sm tracking-widest uppercase hover:bg-foreground/90 transition-all"
+            >
+              Richiedi accesso
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      {/* Flower Detail Modal */}
+      {selectedFlower && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-6"
+          onClick={() => setSelectedFlower(null)}
+        >
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+          
+          {/* Modal */}
+          <div 
+            className="relative bg-background border border-border max-w-md w-full p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedFlower(null)}
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Content */}
+            <h3 className="font-serif text-2xl md:text-3xl text-foreground mb-8">
+              {selectedFlower.name}
+            </h3>
+
+            <div className="space-y-6">
+              {/* Origins */}
+              <div>
+                <p className="text-xs tracking-[0.15em] uppercase text-muted-foreground mb-3">
+                  Origini disponibili
+                </p>
+                <div className="space-y-2">
+                  {selectedFlower.availability.map((avail) => (
+                    <div key={avail.origin} className="flex items-center gap-3">
+                      <span className={`w-2.5 h-2.5 rounded-full ${originColors[avail.origin]}`} />
+                      <span className="text-foreground">{avail.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Availability */}
+              <div>
+                <p className="text-xs tracking-[0.15em] uppercase text-muted-foreground mb-3">
+                  Disponibilità
+                </p>
+                <p className="text-foreground">
+                  {selectedFlower.availability.length > 1 
+                    ? "Variabile in base all'origine"
+                    : selectedFlower.availability[0].period
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Footer />
+      <WhatsAppButton />
+    </>
+  )
+}
+"use client"
+
+import { useState } from "react"
+import Link from "next/link"
+import { ArrowLeft, Check } from "lucide-react"
+
+export default function RichiediAccessoPage() {
+  const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    
+    // Simulate form submission
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    
+    setIsSubmitting(false)
+    setSubmitted(true)
+  }
+
+  if (submitted) {
+    return (
+      <main className="min-h-screen bg-background pt-32 pb-24 px-6">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="w-20 h-20 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-8">
+            <Check className="w-10 h-10 text-accent" />
+          </div>
+          <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
+            Grazie per la tua richiesta
+          </h1>
+          <p className="text-muted-foreground text-lg mb-12">
+            Il nostro team verificherà i dati inviati e ti contatterà.
+          </p>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-foreground hover:opacity-70 transition-opacity"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Torna alla home
+          </Link>
+        </div>
+      </main>
+    )
+  }
+
+  return (
+    <main className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
+        <nav className="mx-auto max-w-7xl px-6 lg:px-12">
+          <div className="flex h-20 items-center justify-between">
+            <Link href="/" className="flex items-center">
+              <img
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/dac5076b-74bc-48a9-9074-051c803c7763-oC6dbnX5bLg3NuEgCFBxD4H9BOyvEt.jpeg"
+                alt="Florlife"
+                className="h-12 w-auto"
+              />
+            </Link>
+            <Link
+              href="/"
+              className="text-sm tracking-wide uppercase text-foreground hover:opacity-70 transition-opacity flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Torna al sito
+            </Link>
+          </div>
+        </nav>
+      </header>
+
+      <div className="pt-32 pb-24 px-6">
+        <div className="max-w-3xl mx-auto">
+          {/* Page Header */}
+          <div className="text-center mb-16">
+            <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
+              Accesso professionale Florlife
+            </h1>
+            <p className="text-muted-foreground text-lg">
+              L&apos;accesso ai servizi Florlife è riservato ai professionisti del settore.
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Ragione Sociale */}
+            <div>
+              <label
+                htmlFor="ragioneSociale"
+                className="block text-sm tracking-wide uppercase text-muted-foreground mb-3"
+              >
+                Ragione Sociale *
+              </label>
+              <input
+                type="text"
+                id="ragioneSociale"
+                name="ragioneSociale"
+                required
+                className="w-full px-4 py-4 bg-transparent border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground transition-colors"
+                placeholder="Nome azienda"
+              />
+            </div>
+
+            {/* Partita IVA */}
+            <div>
+              <label
+                htmlFor="partitaIva"
+                className="block text-sm tracking-wide uppercase text-muted-foreground mb-3"
+              >
+                Partita IVA *
+              </label>
+              <input
+                type="text"
+                id="partitaIva"
+                name="partitaIva"
+                required
+                className="w-full px-4 py-4 bg-transparent border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground transition-colors"
+                placeholder="IT00000000000"
+              />
+            </div>
+
+            {/* Nome e Cognome */}
+            <div>
+              <label
+                htmlFor="nomeCognome"
+                className="block text-sm tracking-wide uppercase text-muted-foreground mb-3"
+              >
+                Nome e Cognome *
+              </label>
+              <input
+                type="text"
+                id="nomeCognome"
+                name="nomeCognome"
+                required
+                className="w-full px-4 py-4 bg-transparent border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground transition-colors"
+                placeholder="Mario Rossi"
+              />
+            </div>
+
+            {/* Telefono */}
+            <div>
+              <label
+                htmlFor="telefono"
+                className="block text-sm tracking-wide uppercase text-muted-foreground mb-3"
+              >
+                Telefono *
+              </label>
+              <input
+                type="tel"
+                id="telefono"
+                name="telefono"
+                required
+                className="w-full px-4 py-4 bg-transparent border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground transition-colors"
+                placeholder="+39 000 000 0000"
+              />
+            </div>
+
+            {/* Email */}
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm tracking-wide uppercase text-muted-foreground mb-3"
+              >
+                Email *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                className="w-full px-4 py-4 bg-transparent border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground transition-colors"
+                placeholder="email@azienda.it"
+              />
+            </div>
+
+            {/* Città */}
+            <div>
+              <label
+                htmlFor="citta"
+                className="block text-sm tracking-wide uppercase text-muted-foreground mb-3"
+              >
+                Città *
+              </label>
+              <input
+                type="text"
+                id="citta"
+                name="citta"
+                required
+                className="w-full px-4 py-4 bg-transparent border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground transition-colors"
+                placeholder="Milano"
+              />
+            </div>
+
+            {/* Messaggio */}
+            <div>
+              <label
+                htmlFor="messaggio"
+                className="block text-sm tracking-wide uppercase text-muted-foreground mb-3"
+              >
+                Messaggio
+              </label>
+              <textarea
+                id="messaggio"
+                name="messaggio"
+                rows={4}
+                className="w-full px-4 py-4 bg-transparent border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground transition-colors resize-none"
+                placeholder="Informazioni aggiuntive (opzionale)"
+              />
+            </div>
+
+            {/* Checkbox */}
+            <div className="flex items-start gap-4 pt-4">
+              <input
+                type="checkbox"
+                id="conferma"
+                name="conferma"
+                required
+                className="mt-1 w-5 h-5 border border-border bg-transparent checked:bg-foreground checked:border-foreground focus:outline-none focus:ring-2 focus:ring-foreground/20"
+              />
+              <label htmlFor="conferma" className="text-foreground text-sm">
+                Confermo di essere un operatore professionale del settore.
+              </label>
+            </div>
+
+            {/* Submit Button */}
+            <div className="pt-6">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full px-12 py-5 bg-foreground text-background text-sm tracking-widest uppercase hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? "Invio in corso..." : "Richiedi accesso"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  )
+}
