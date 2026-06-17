@@ -13,12 +13,38 @@ export default function RichiediAccessoPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
-    
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    
-    setIsSubmitting(false)
-    setSubmitted(true)
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    formData.append("_subject", "Nuova richiesta accesso Florlife")
+    formData.append("_template", "table")
+    formData.append("_captcha", "false")
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/infoge@florlifesrl.com", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error("Errore invio form")
+      }
+
+      setSubmitted(true)
+      form.reset()
+    } catch (error) {
+      alert(
+        lang === "it"
+          ? "Errore durante l'invio. Riprova o contattaci via WhatsApp."
+          : "Error while sending. Please try again or contact us via WhatsApp."
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (submitted) {
@@ -54,7 +80,7 @@ export default function RichiediAccessoPage() {
           <div className="flex h-20 items-center justify-between">
             <Link href="/" className="flex items-center">
               <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/dac5076b-74bc-48a9-9074-051c803c7763-oC6dbnX5bLg3NuEgCFBxD4H9BOyvEt.jpeg"
+                src="/florlife-logo-transparent.png"
                 alt="Florlife"
                 className="h-12 w-auto"
               />

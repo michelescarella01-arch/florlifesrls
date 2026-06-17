@@ -14,7 +14,7 @@ export function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block">
               <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/dac5076b-74bc-48a9-9074-051c803c7763-oC6dbnX5bLg3NuEgCFBxD4H9BOyvEt.jpeg"
+                src="/florlife-logo-transparent.png"
                 alt="Florlife - Import Export Sanremo Genova"
                 className="h-20 w-auto"
               />
@@ -29,7 +29,7 @@ export function Footer() {
           <div>
             <p className="text-sm font-medium tracking-wide text-foreground mb-4">Florlife Sanremo</p>
             <div className="space-y-3 text-sm text-muted-foreground">
-              <p>Via Quinto Mansuino, Box 5</p>
+              <p>Via Quinto Mansuino, Box 17-18</p>
               <p>18038 Sanremo (IM)</p>
               <div className="pt-2 space-y-2">
                 <a href="tel:+393343491273" className="flex items-center gap-2 hover:text-foreground transition-colors">

@@ -7,6 +7,7 @@ import { StatsSection } from "@/components/stats-section"
 import { TestimonialsSection } from "@/components/testimonials-section"
 import { ArrivalsSection } from "@/components/arrivals-section"
 import { SeasonalityPreview } from "@/components/seasonality-preview"
+import { WorkspaceSection } from "@/components/workspace-section"
 import { LocationsSection } from "@/components/locations-section"
 import { ClientAreaSection } from "@/components/client-area-section"
 import { Footer } from "@/components/footer"
@@ -23,6 +24,7 @@ export default function Home() {
       <StatsSection />
       <TestimonialsSection />
       <ArrivalsSection />
+      <WorkspaceSection />
       <SeasonalityPreview />
       <LocationsSection />
       <ClientAreaSection />

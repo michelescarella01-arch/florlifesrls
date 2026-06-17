@@ -7,7 +7,7 @@ import { useFlorlifeLang } from "@/lib/use-florlife-lang"
 const locations = [
   {
     name: "Sanremo",
-    address: "Via Quinto Mansuino, Box 5",
+    address: "Via Quinto Mansuino, Box 17-18",
     city: "18038 Sanremo (IM)",
     phone: "+39 334 349 1273",
     email: "infosr@florlifesrl.com",
@@ -20,7 +20,7 @@ const locations = [
       { day: "Sabato", slots: ["07:00–10:00", "16:00–19:00"] },
     ],
     mapUrl: "https://www.google.com/maps/place/Via+Quinto+Mansuino,+18038+Sanremo+IM",
-    embedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1000!2d7.7683!3d43.8156!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12cdc94fcbe73f1f%3A0x4d7d8f8e8e8e8e8e!2sVia%20Quinto%20Mansuino%2C%2018038%20Sanremo%20IM!5e0!3m2!1sit!2sit!4v1700000000000!5m2!1sit!2sit",
+    embedUrl: "https://www.google.com/maps?q=43.824971,7.833227&z=18&output=embed",
   },
   {
     name: "Genova",

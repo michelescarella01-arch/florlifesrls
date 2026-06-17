@@ -67,9 +67,9 @@ export function Navigation() {
         <div className="flex h-20 items-center justify-between">
           <Link href="/" className="flex items-center">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/dac5076b-74bc-48a9-9074-051c803c7763-oC6dbnX5bLg3NuEgCFBxD4H9BOyvEt.jpeg"
+              src="/florlife-logo-transparent.png"
               alt="Florlife - Import Export Sanremo Genova"
-              className={`h-12 w-auto transition-all rounded ${scrolled ? "" : "bg-white/90 p-1"}`}
+              className="h-16 w-auto transition-all"
             />
           </Link>
 
